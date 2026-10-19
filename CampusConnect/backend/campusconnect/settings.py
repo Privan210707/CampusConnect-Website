@@ -138,6 +138,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
     "http://127.0.0.1:5500,http://localhost:5500",
+    "https://campusconnect-website-frontend.vercel.app"
 )
 
 # Allow any local static-server origin in DEBUG so the HTML frontend can call the API.
