@@ -120,3 +120,10 @@ CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
     "http://127.0.0.1:5500,http://localhost:5500",
 )
+
+# Allow any local static-server origin in DEBUG so the HTML frontend can call the API.
+CORS_ALLOWED_ORIGIN_REGEXES = []
+if DEBUG:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^http://(localhost|127\.0\.0\.1)(:\d+)?$",
+    ]

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var clubs = CampusConnect.SAMPLE_DATA.clubs;
+  var clubs = [];
+  var loadError = "";
   var grid = document.getElementById("club-grid");
   var search = document.getElementById("club-search");
   var filters = document.getElementById("club-filters");
@@ -26,12 +27,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function matches(club, query) {
-    var haystack = (club.name + " " + club.short + " " + club.description).toLowerCase();
+    var haystack = (club.name + " " + club.category + " " + club.description).toLowerCase();
     var categoryOk = activeCategory === "All" || club.category === activeCategory;
     return categoryOk && haystack.indexOf(query) !== -1;
   }
 
   function renderClubs() {
+    if (loadError) {
+      count.textContent = "";
+      CampusConnect.showState(grid, loadError);
+      return;
+    }
+
     var query = (search.value || "").trim().toLowerCase();
     var visible = clubs.filter(function (club) {
       return matches(club, query);
@@ -40,9 +47,16 @@ document.addEventListener("DOMContentLoaded", function () {
     count.textContent =
       visible.length === 1 ? "1 club shown" : visible.length + " clubs shown";
 
+    if (!clubs.length) {
+      CampusConnect.showState(grid, "No clubs are listed yet.");
+      return;
+    }
+
     if (!visible.length) {
-      grid.innerHTML =
-        '<p class="empty-state">No clubs match that search. Try another keyword or category.</p>';
+      CampusConnect.showState(
+        grid,
+        "No clubs match that search. Try another keyword or category."
+      );
       return;
     }
 
@@ -51,23 +65,23 @@ document.addEventListener("DOMContentLoaded", function () {
         return (
           '<article class="card">' +
           '<div class="card-media" style="background:' +
-          CampusConnect.mediaGradient(club.id) +
+          CampusConnect.mediaGradient(Number(club.id) || 0) +
           '">' +
-          CampusConnect.escapeHtml(club.name.slice(0, 2).toUpperCase()) +
+          CampusConnect.escapeHtml((club.name || "").slice(0, 2).toUpperCase()) +
           "</div>" +
           '<div class="card-body">' +
           '<span class="chip">' +
-          CampusConnect.escapeHtml(club.category) +
+          CampusConnect.escapeHtml(club.category || "") +
           "</span>" +
           "<h3>" +
-          CampusConnect.escapeHtml(club.name) +
+          CampusConnect.escapeHtml(club.name || "") +
           "</h3>" +
           "<p>" +
-          CampusConnect.escapeHtml(club.short) +
+          CampusConnect.escapeHtml(CampusConnect.truncate(club.description, 140)) +
           "</p>" +
           '<div class="card-actions">' +
           '<button type="button" class="btn btn-navy" data-club-id="' +
-          club.id +
+          CampusConnect.escapeHtml(String(club.id)) +
           '">View details</button>' +
           "</div></div></article>"
         );
@@ -77,25 +91,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function showClub(id) {
     var club = clubs.find(function (item) {
-      return item.id === id;
+      return Number(item.id) === Number(id);
     });
     if (!club) {
       return;
     }
     modalBody.innerHTML =
       '<p class="chip">' +
-      CampusConnect.escapeHtml(club.category) +
+      CampusConnect.escapeHtml(club.category || "") +
       "</p>" +
       "<p>" +
-      CampusConnect.escapeHtml(club.description) +
-      "</p>" +
-      '<p class="meta"><strong>Meets:</strong> ' +
-      CampusConnect.escapeHtml(club.meeting) +
-      "</p>" +
-      '<p class="meta"><strong>Contact:</strong> ' +
-      CampusConnect.escapeHtml(club.email) +
+      CampusConnect.escapeHtml(club.description || "") +
       "</p>";
-    document.getElementById("club-modal-title").textContent = club.name;
+    document.getElementById("club-modal-title").textContent = club.name || "Club details";
     CampusConnect.openModal(modal);
   }
 
@@ -116,9 +124,25 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!button) {
       return;
     }
-    showClub(Number(button.getAttribute("data-club-id")));
+    showClub(button.getAttribute("data-club-id"));
   });
 
   renderFilters();
-  renderClubs();
+  CampusConnect.showState(grid, "Loading clubs…");
+  count.textContent = "";
+
+  CampusConnect.getJson("/api/clubs/")
+    .then(function (items) {
+      clubs = Array.isArray(items) ? items : [];
+      loadError = "";
+      renderClubs();
+    })
+    .catch(function (error) {
+      clubs = [];
+      loadError =
+        error && error.message
+          ? error.message
+          : "Unable to load clubs. Please try again later.";
+      renderClubs();
+    });
 });

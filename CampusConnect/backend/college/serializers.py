@@ -30,6 +30,8 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
         model = EventRegistration
         fields = ["id", "event", "student_name", "email", "registered_at"]
         read_only_fields = ["id", "registered_at"]
+        # UniqueConstraint is checked in validate() so the error maps to `email`.
+        validators = []
 
     def validate_email(self, value):
         return value.strip().lower()

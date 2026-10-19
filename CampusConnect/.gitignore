@@ -13,3 +13,14 @@ staticfiles/
 *.log
 .DS_Store
 Thumbs.db
+# Environment variables
+.env.*
+!.env.example
+
+# Python test and cache files
+.pytest_cache/
+.mypy_cache/
+
+# Local PostgreSQL and database backups
+*.dump
+*.backup

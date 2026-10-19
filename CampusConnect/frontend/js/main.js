@@ -6,16 +6,55 @@ window.CampusConnect = window.CampusConnect || {};
 
 CampusConnect.EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-CampusConnect.formatDate = function (isoDate) {
-  var date = new Date(isoDate + "T00:00:00");
-  if (Number.isNaN(date.getTime())) {
-    return isoDate;
+CampusConnect.parseDate = function (value) {
+  if (!value) {
+    return null;
+  }
+  var date = new Date(value);
+  if (Number.isNaN(date.getTime()) && typeof value === "string" && value.indexOf("T") === -1) {
+    date = new Date(value + "T00:00:00");
+  }
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+CampusConnect.formatDate = function (value) {
+  var date = CampusConnect.parseDate(value);
+  if (!date) {
+    return value || "";
   }
   return date.toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
     year: "numeric"
   });
+};
+
+CampusConnect.formatTime = function (value) {
+  var date = CampusConnect.parseDate(value);
+  if (!date) {
+    return "";
+  }
+  return date.toLocaleTimeString("en-IN", {
+    hour: "numeric",
+    minute: "2-digit"
+  });
+};
+
+CampusConnect.truncate = function (value, maxLength) {
+  var text = String(value || "").trim();
+  var limit = maxLength || 140;
+  if (text.length <= limit) {
+    return text;
+  }
+  return text.slice(0, limit).replace(/\s+\S*$/, "") + "…";
+};
+
+CampusConnect.showState = function (container, message) {
+  if (!container) {
+    return;
+  }
+  container.innerHTML =
+    '<p class="empty-state">' + CampusConnect.escapeHtml(message) + "</p>";
 };
 
 CampusConnect.setActiveNav = function () {

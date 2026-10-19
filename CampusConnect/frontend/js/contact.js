@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var college = CampusConnect.SAMPLE_DATA.college;
+  var college = CampusConnect.COLLEGE;
   var details = document.getElementById("contact-details");
   var form = document.getElementById("feedback-form");
   var status = document.getElementById("feedback-status");
+  var submitBtn = form.querySelector('button[type="submit"]');
 
   details.innerHTML =
     "<h2>" +
@@ -33,19 +34,50 @@ document.addEventListener("DOMContentLoaded", function () {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     CampusConnect.clearFieldErrors(form);
-    status.textContent = "";
-    status.className = "form-status";
+    CampusConnect.setStatus(status, "", "");
 
-    if (!CampusConnect.validateRequired(form, ["name", "email", "subject", "message"])) {
-      status.textContent = "Please fix the highlighted fields.";
-      status.className = "form-status error";
+    var valid = CampusConnect.validateRequired(form, ["name", "email", "subject", "message"]);
+    var message = String(form.elements.message.value || "").trim();
+    if (valid && message.length < 10) {
+      valid = false;
+      var messageError = form.querySelector('[data-error-for="message"]');
+      if (messageError) {
+        messageError.textContent = "Message must be at least 10 characters.";
+      }
+    }
+
+    if (!valid) {
+      CampusConnect.setStatus(status, "Please fix the highlighted fields.", "error");
       return;
     }
 
-    /* Temporary client-only confirmation. Not saved to a database. */
-    status.textContent =
-      "Feedback captured locally for preview only. It is not stored in PostgreSQL yet.";
-    status.className = "form-status success";
-    form.reset();
+    submitBtn.disabled = true;
+    CampusConnect.setStatus(status, "Sending feedback…", "");
+
+    CampusConnect.postJson("/api/feedback/", {
+      name: String(form.elements.name.value).trim(),
+      email: String(form.elements.email.value).trim(),
+      subject: String(form.elements.subject.value).trim(),
+      message: message
+    })
+      .then(function () {
+        CampusConnect.setStatus(status, "Feedback submitted successfully. Thank you.", "success");
+        form.reset();
+      })
+      .catch(function (error) {
+        if (error && error.fields) {
+          CampusConnect.applyFieldErrors(form, error.fields);
+        }
+        CampusConnect.setStatus(
+          status,
+          error && error.message
+            ? error.message
+            : "Feedback could not be submitted.",
+          "error"
+        );
+      })
+      .then(function () {
+        submitBtn.disabled = false;
+      });
   });
 });
