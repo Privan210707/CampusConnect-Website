@@ -4,7 +4,7 @@
  */
 window.CampusConnect = window.CampusConnect || {};
 
-CampusConnect.API_BASE_URL = "http://127.0.0.1:8000";
+CampusConnect.API_BASE_URL = "https://campus-connect-website-blue.vercel.app";
 
 CampusConnect.apiUrl = function (path) {
   var base = String(CampusConnect.API_BASE_URL || "").replace(/\/$/, "");
