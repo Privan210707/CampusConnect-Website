@@ -16,8 +16,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 
-def env_list(name, default=""):
-    raw = os.environ.get(name, default)
+def env_list(name, default=None):
+    raw = os.environ.get(name)
+
+    if raw is None:
+        raw = default if default is not None else ""
+
+    if isinstance(raw, list):
+        return [item.strip() for item in raw if item.strip()]
+
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
