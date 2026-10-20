@@ -17,9 +17,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    var now = Date.now();
     grid.innerHTML = events
       .map(function (event) {
         var startsAt = event.starts_at || "";
+        var startDate = CampusConnect.parseDate(startsAt);
+        var isUpcoming = startDate && startDate.getTime() >= now;
         var timeLabel = CampusConnect.formatTime(startsAt);
         var meta = CampusConnect.escapeHtml(event.venue || "");
         if (timeLabel) {
@@ -43,9 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
           CampusConnect.escapeHtml(event.description || "") +
           "</p>" +
           '<div class="card-actions">' +
-          '<button type="button" class="btn btn-navy" data-register="' +
-          CampusConnect.escapeHtml(String(event.id)) +
-          '">Register</button>' +
+          (isUpcoming
+            ? '<button type="button" class="btn btn-navy" data-register="' +
+              CampusConnect.escapeHtml(String(event.id)) +
+              '">Register</button>'
+            : "") +
           "</div></div></article>"
         );
       })
