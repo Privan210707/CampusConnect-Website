@@ -55,6 +55,13 @@ class AnnouncementAPITests(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["title"], "Library hours")
 
+    def test_api_does_not_offer_browsable_html_renderer(self):
+        response = self.client.get(
+            reverse("announcement-list"),
+            HTTP_ACCEPT="text/html",
+        )
+        self.assertEqual(response.status_code, 406)
+
 
 class ClubAPITests(APITestCase):
     def setUp(self):

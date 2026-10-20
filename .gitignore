@@ -1,0 +1,19 @@
+# Python environments and generated files
+.venv/
+**/.venv/
+__pycache__/
+*.py[cod]
+CampusConnect/backend/staticfiles/
+
+# Local environment files. Keep safe example templates versioned.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Frontend dependencies and local tooling output
+node_modules/
+.pytest_cache/
+/CampusConnect
+/CampusConnect/backend
+
+AUDIT_REPORT.md

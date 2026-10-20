@@ -37,7 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function renderEventPreview(items) {
-    var upcoming = items.slice(0, 3);
+    var now = Date.now();
+    var upcoming = items
+      .filter(function (event) {
+        var startsAt = CampusConnect.parseDate(event.starts_at);
+        return startsAt && startsAt.getTime() >= now;
+      })
+      .slice(0, 3);
     if (!upcoming.length) {
       CampusConnect.showState(eventPreview, "No upcoming events are listed yet.");
       return;
