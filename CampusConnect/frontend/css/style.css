@@ -189,6 +189,53 @@ textarea:focus-visible {
   padding: 72px 0 80px;
 }
 
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--navy-mid), var(--blue));
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.28);
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-image-fallback {
+  display: none;
+}
+
+.hero-image.is-fallback img {
+  display: none;
+}
+
+.hero-image.is-fallback .hero-image-fallback {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 24px;
+  color: #dceaf7;
+  text-align: center;
+}
+
 .hero h1 {
   font-family: var(--display);
   font-size: clamp(2rem, 4vw, 3.3rem);
@@ -366,6 +413,51 @@ main {
   font-family: var(--display);
   font-size: 1.4rem;
   letter-spacing: 0.04em;
+}
+
+.club-card-media {
+  height: 148px;
+  flex: 0 0 148px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--sky), var(--sky-deep));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.club-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.club-card-media.image-fallback img {
+  display: none;
+}
+
+.event-card-media {
+  height: 180px;
+  flex: 0 0 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--sky), var(--sky-deep));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.event-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-card-media.image-fallback {
+  background: linear-gradient(135deg, var(--sky), var(--sky-deep));
+}
+
+.event-card-media.image-fallback img {
+  display: none;
+}
+
+.event-date {
+  margin: 0;
+  font-weight: 600;
 }
 
 .card-body {
@@ -684,6 +776,15 @@ body.modal-open {
 }
 
 @media (max-width: 760px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .hero-image {
+    aspect-ratio: 16 / 10;
+  }
+
   .nav-toggle {
     display: inline-flex;
   }

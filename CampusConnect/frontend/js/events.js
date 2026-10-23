@@ -24,23 +24,22 @@ document.addEventListener("DOMContentLoaded", function () {
         var startDate = CampusConnect.parseDate(startsAt);
         var isUpcoming = startDate && startDate.getTime() >= now;
         var timeLabel = CampusConnect.formatTime(startsAt);
-        var meta = CampusConnect.escapeHtml(event.venue || "");
+        var dateLabel = CampusConnect.formatDate(startsAt);
         if (timeLabel) {
-          meta += " · " + CampusConnect.escapeHtml(timeLabel);
+          dateLabel += " · " + timeLabel;
         }
         return (
           '<article class="card">' +
-          '<div class="card-media" style="background:' +
-          CampusConnect.mediaGradient(Number(event.id) || 0) +
-          '">' +
-          CampusConnect.escapeHtml(CampusConnect.formatDate(startsAt)) +
-          "</div>" +
+          CampusConnect.eventImageMarkup(event) +
           '<div class="card-body">' +
           "<h3>" +
           CampusConnect.escapeHtml(event.title || "") +
           "</h3>" +
-          '<p class="meta">' +
-          meta +
+          '<p class="meta event-date">Date: ' +
+          CampusConnect.escapeHtml(dateLabel) +
+          "</p>" +
+          '<p class="meta">Venue: ' +
+          CampusConnect.escapeHtml(event.venue || "") +
           "</p>" +
           "<p>" +
           CampusConnect.escapeHtml(event.description || "") +

@@ -39,16 +39,26 @@
 
     <main id="main">
       <section class="hero">
-        <div class="container">
-          <p class="eyebrow">Student portal</p>
-          <h1>Welcome to Riverside College</h1>
-          <p id="college-intro">
-            CampusConnect is the college hub for news, clubs, and campus events.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="clubs.html">Explore clubs</a>
-            <a class="btn btn-ghost" href="events.html">See upcoming events</a>
+        <div class="container hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">Student portal</p>
+            <h1>Welcome to Riverside College</h1>
+            <p id="college-intro">
+              CampusConnect is the college hub for news, clubs, and campus events.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="clubs.html">Explore clubs</a>
+              <a class="btn btn-ghost" href="events.html">See upcoming events</a>
+            </div>
           </div>
+          <figure class="hero-image">
+            <img
+              src="campus-building.jpg"
+              alt="Modern university building surrounded by greenery on a bright day"
+              onerror="this.hidden=true;this.parentElement.classList.add('is-fallback')"
+            />
+            <figcaption class="hero-image-fallback">Campus photograph unavailable</figcaption>
+          </figure>
         </div>
       </section>
 

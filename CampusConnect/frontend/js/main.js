@@ -167,6 +167,38 @@ CampusConnect.mediaGradient = function (seed) {
   return palettes[seed % palettes.length];
 };
 
+CampusConnect.getEventImage = function (event) {
+  var title = String(event.title || "").toLowerCase();
+  var text = [event.title, event.description, event.category]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  var images = [
+    { match: /ccc society bug hunt/, url: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=900&q=80", alt: "Colorful programming code displayed on a computer monitor" },
+    { match: /web development workshop/, url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80", alt: "A laptop with code for a web development workshop" },
+    { match: /robotics demonstration/, url: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80", alt: "A robot representing a robotics demonstration" },
+    { match: /cultural fest/, url: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80", alt: "A live music performance at a cultural festival" },
+    { match: /robot|robotics|electronics|engineering|maker|prototype/, url: "https://images.unsplash.com/photo-1535378620166-273708d44e4c?auto=format&fit=crop&w=900&q=80", alt: "A robotics project being built" },
+    { match: /hackathon|coding|programming|software|cyber|developer|computer|web development/, url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80", alt: "Students collaborating around a laptop at a programming event" },
+    { match: /sport|football|soccer|basketball|cricket|athlet|match|tournament/, url: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=900&q=80", alt: "Players competing in a team sport" },
+    { match: /cultur|fest|music|dance|perform|concert|theatre|art/, url: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80", alt: "A live music performance at a cultural festival" },
+    { match: /workshop|seminar|technical|technology|science|innovation|lecture/, url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80", alt: "Students working together during a technology workshop" }
+  ];
+  var image = images.find(function (item) { return item.match.test(title); }) ||
+    images.find(function (item) { return item.match.test(text); });
+  return image || {
+    url: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=900&q=80",
+    alt: "Students gathering on campus for an event"
+  };
+};
+
+CampusConnect.eventImageMarkup = function (event) {
+  var image = CampusConnect.getEventImage(event);
+  return '<div class="event-card-media"><img src="' + image.url + '" alt="' +
+    CampusConnect.escapeHtml(image.alt) +
+    '" loading="lazy" onerror="this.hidden=true;this.parentElement.classList.add(\'image-fallback\')"></div>';
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   CampusConnect.setActiveNav();
   CampusConnect.initMobileNav();
