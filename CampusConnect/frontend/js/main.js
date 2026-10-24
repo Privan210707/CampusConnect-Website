@@ -174,10 +174,10 @@ CampusConnect.getEventImage = function (event) {
     .join(" ")
     .toLowerCase();
   var images = [
-    { match: /ccc society bug hunt/, url: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=900&q=80", alt: "Colorful programming code displayed on a computer monitor" },
-    { match: /web development workshop/, url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80", alt: "A laptop with code for a web development workshop" },
-    { match: /robotics demonstration/, url: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80", alt: "A robot representing a robotics demonstration" },
-    { match: /cultural fest/, url: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80", alt: "A live music performance at a cultural festival" },
+    { match: /ccc society bug hunt/, url: "images/campus-coding-challenge.jpg", alt: "Students collaborating during a campus coding challenge" },
+    { match: /web development workshop/, url: "images/web-development-workshop.jpg", alt: "Students working together during a web development workshop" },
+    { match: /robotics demonstration/, url: "images/robotics-demonstration.jpg", alt: "A robotics project being built for a demonstration" },
+    { match: /cultural fest/, url: "images/cultural-fest.jpg", alt: "A crowd enjoying a live cultural performance" },
     { match: /robot|robotics|electronics|engineering|maker|prototype/, url: "https://images.unsplash.com/photo-1535378620166-273708d44e4c?auto=format&fit=crop&w=900&q=80", alt: "A robotics project being built" },
     { match: /hackathon|coding|programming|software|cyber|developer|computer|web development/, url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80", alt: "Students collaborating around a laptop at a programming event" },
     { match: /sport|football|soccer|basketball|cricket|athlet|match|tournament/, url: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=900&q=80", alt: "Players competing in a team sport" },
